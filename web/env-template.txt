@@ -1,0 +1,40 @@
+# 请手动配置环境变量文件
+
+## 1. 编辑 .env.development 文件
+
+打开文件：/Users/niuhaipeng/code-niuhp/ai-teacher/web/.env.development
+
+添加以下内容：
+
+```
+# 开发环境配置
+VITE_API_BASE_URL=/api
+
+# 是否使用 Mock 数据（true=使用Mock，false=使用真实后端）
+VITE_USE_MOCK=true
+```
+
+## 2. 编辑 .env.production 文件
+
+打开文件：/Users/niuhaipeng/code-niuhp/ai-teacher/web/.env.production
+
+添加以下内容：
+
+```
+# 生产环境配置
+VITE_API_BASE_URL=https://api.example.com
+
+# 生产环境不使用 Mock 数据
+VITE_USE_MOCK=false
+```
+
+## 3. 重启开发服务器
+
+配置完成后，必须重启开发服务器：
+
+```bash
+# 停止当前服务器 (Ctrl+C)
+# 然后重新启动
+npm run dev
+```
+

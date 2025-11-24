@@ -1,0 +1,171 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: ai-teacher-server
+  
+  # 数据源配置
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ai_teacher?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+    
+    # Druid 配置
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      
+      # 监控配置
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        login-username: admin
+        login-password: admin
+      
+      # Web 监控
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
+
+  # Redis 配置
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password:
+      database: 0
+      timeout: 10s
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1ms
+
+  # 文件上传配置
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+  # Jackson 配置
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+    serialization:
+      write-dates-as-timestamps: false
+
+# MyBatis Plus 配置
+mybatis-plus:
+  # Mapper XML 文件位置
+  mapper-locations: classpath*:/mapper/**/*.xml
+  # 实体类包路径
+  type-aliases-package: com.aiteacher.server.entity
+  
+  # 全局配置
+  global-config:
+    # 数据库相关配置
+    db-config:
+      # 主键类型（AUTO: 数据库自增，INPUT: 用户输入，ID_WORKER: 雪花算法）
+      id-type: AUTO
+      # 逻辑删除字段名
+      logic-delete-field: deleted
+      # 逻辑删除值（删除时设置为1）
+      logic-delete-value: 1
+      # 逻辑未删除值（默认为0）
+      logic-not-delete-value: 0
+    
+    # Banner
+    banner: false
+  
+  # 原生配置
+  configuration:
+    # 是否开启驼峰命名映射
+    map-underscore-to-camel-case: true
+    # 日志实现
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 缓存
+    cache-enabled: true
+    # 懒加载
+    lazy-loading-enabled: true
+
+# 日志配置
+logging:
+  level:
+    root: INFO
+    com.aiteacher.server: DEBUG
+    com.aiteacher.server.mapper: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"
+  file:
+    name: logs/ai-teacher.log
+    max-size: 10MB
+    max-history: 30
+
+# 自定义配置
+ai-teacher:
+  # JWT 配置
+  jwt:
+    secret: aiteacher-secret-key-2025-very-long-and-secure
+    expiration: 604800  # 7天（秒）
+    header: Authorization
+    prefix: "Bearer "
+  
+  # 微信小程序配置
+  wechat:
+    miniapp:
+      app-id: your-miniapp-appid
+      secret: your-miniapp-secret
+  
+  # 阿里云 OSS 配置
+  oss:
+    endpoint: oss-cn-beijing.aliyuncs.com
+    access-key-id: your-access-key-id
+    access-key-secret: your-access-key-secret
+    bucket-name: ai-teacher
+    url-prefix: https://ai-teacher.oss-cn-beijing.aliyuncs.com/
+  
+  # AI 模型配置
+  ai:
+    # 阿里通义千问
+    qwen:
+      api-key: your-qwen-api-key
+      model: qwen-plus
+      endpoint: https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation
+    
+    # 腾讯元宝（混元）
+    hunyuan:
+      app-id: your-hunyuan-appid
+      secret-id: your-secret-id
+      secret-key: your-secret-key
+      endpoint: https://hunyuan.tencentcloudapi.com
+    
+    # 豆包
+    doubao:
+      api-key: your-doubao-api-key
+      endpoint: https://ark.cn-beijing.volces.com/api/v3
+    
+    # DeepSeek
+    deepseek:
+      api-key: your-deepseek-api-key
+      model: deepseek-chat
+      endpoint: https://api.deepseek.com/v1/chat/completions
+
